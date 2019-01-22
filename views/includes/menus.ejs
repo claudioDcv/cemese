@@ -1,0 +1,43 @@
+<div class="sidenav">
+    <a class="btn d-block font-weight-bold text-white" href="/cemese">
+        <span class="cemese-desktop">Cemese</span>
+        <span class="cemese-mobile">CS</span>
+    </a>
+    <hr />
+    <ul class="nav flex-column">
+        <% if (metadata.isLogin) { %>
+        <% principalMenu.forEach(function(menu){ %>
+        <li class="nav-item">
+            <a class="btn d-block text-white" href="<%= menu.url %>"> 
+                <span class="cemese-desktop"><%= menu.title %></span>
+                <span class="cemese-mobile"><%= menu.title_min %></span>
+            </a>
+        </li>
+        <% }); %>
+        <% } %>
+
+        <% if (metadata.isLogin) { %>
+        <li class="nav-item">
+            <a class="btn d-block text-white" href="/cemese/logout">
+                <span class="cemese-desktop">Cerrar Sesión</span>
+                <span class="cemese-mobile">C</span>
+            </a>
+        </li>
+        <% } else { %>
+        <li class="nav-item">
+            <a class="btn d-block text-white" href="/cemese/login">
+                <span class="cemese-desktop">Login</span>
+                <span class="cemese-mobile">L</span>
+            </a>
+        </li>
+        <% } %>
+        <hr />
+        <li>
+            <span class="cemese-desktop text-white btn .disabled">
+                <%= metadata.user.username %>
+            </span>
+            <span class="cemese-mobile text-white btn .disabled">U</span>
+        </li>
+    </ul>
+    
+</div>

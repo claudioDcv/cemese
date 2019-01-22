@@ -1,0 +1,130 @@
+.image-galery {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #1111119e;
+  z-index: 1;
+  display: none;
+}
+
+.image-galery.open {
+  display: block;
+}
+
+.image-galery-container {
+  position: absolute;
+  background: white;
+  width: 900px;
+  max-width: 90%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 800px;
+  max-height: 90%;
+  top: 0;
+  bottom: 0;
+}
+
+.image-galery-container > button {
+  font-size: 10px;
+  background: #b1b1b1;
+  border: none;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  height: 24px;
+  width: 24px;
+  color: #111111;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.image-galery-container > div {
+  padding: 55px 0;
+}
+
+.container-image .card:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.custom-file {
+  height: 150px;
+}
+
+.custom-file img, .image-thumbnail {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+
+/* TOOLBAR QUILL */
+#toolbar {
+  border-radius: 5px 5px 0 0;
+}
+
+#editor {
+  border-radius: 0 0 5px 5px;
+}
+
+.cemese-galery {}
+.cemese-galery li {}
+.cemese-galery li a {}
+.cemese-galery li img {}
+
+.btn-form { margin-top: 32px; }
+
+.post-container img{
+  max-width: 100%;
+}
+
+.sidenav {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+  text-align: left;
+}
+
+.sidenav .btn {
+  text-align: left;
+}
+
+.container {
+  max-width: 100%;
+  margin-left: 160px; /* Same as the width of the sidenav */
+  width: auto;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 670px) {
+  .cemese-mobile { display: none; }
+  .cemese-desktop { display: block; }
+}
+
+@media screen and (max-width: 669px) {
+  .cemese-mobile { display: block; }
+  .cemese-desktop { display: none; }
+  .sidenav {width: 45px;}
+  .container {
+    margin-left: 45px; /* Same as the width of the sidenav */
+  }
+}
+
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+

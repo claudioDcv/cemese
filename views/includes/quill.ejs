@@ -1,0 +1,94 @@
+<div id="image-galery" class="image-galery">
+    <div class="image-galery-container">
+        <button id="image-galery-close"><i class="icofont-ui-close"></i></a></button>
+        <div class="container-image">
+            <div id="target-imgs" class="row mx-0"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var imageHandler = function (event) {
+        debugger;
+    }
+    var toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'image'];
+    var options = {
+        debug: 'info',
+        placeholder: 'Compose an epic...',
+        readOnly: false,
+        theme: 'snow',
+        modules: {
+            toolbar: '#toolbar'
+        }
+    };
+    var editor = new Quill('#editor', options);
+
+    // tool imagen
+
+    document.getElementById('image-galery-close').addEventListener('click', function (event) {
+        document.getElementById('image-galery').className = "image-galery";
+    }, false);
+
+    var clickSetImage = function (event) {
+        event.preventDefault();
+        var sel = editor.getSelection(true);
+        editor.insertEmbed(sel.index, 'image', event.target.dataset.src);
+        document.getElementById('image-galery').className = "image-galery";
+    };
+
+    var btn = document.getElementById('insert-image-tool')
+    btn.addEventListener('click', function (event) {
+        event.preventDefault();
+        document.getElementById('image-galery').className = "image-galery open";
+        document.getElementById('target-imgs').innerHTML = ''
+        fetch('/cemese/galery/json', {
+            method: 'get',
+        }).then(e => {
+            e.json().then(f => {
+                f.forEach(element => {
+                    /*
+                    <div class="card">
+                        <img src="a" class="card-img-top" alt="pokemon_icon_065_00.png">
+                    </div>
+                    */
+                    var cont = document.createElement('div');
+                    var b = document.createElement('div');
+                    var i = document.createElement('img');
+
+                    cont.className = "col-xs-2 col-md-2";
+
+                    b.dataset.src = element.uri
+                    b.className = "card mb-2";
+
+                    i.src = element.uri
+                    i.alt = element.originalname
+                    i.dataset.src = element.uri
+                    i.className = "card-img-top"
+
+                    b.addEventListener('click', clickSetImage, false)
+
+                    document.getElementById('target-imgs').appendChild(cont)
+                    cont.appendChild(b)
+                    b.appendChild(i)
+                });
+            })
+        });
+        // var image = prompt('image')
+        // editor.insertEmbed(sel.index, 'image', image);
+    }, false);
+
+    var btn = document.getElementById('insert-video-tool')
+    btn.addEventListener('click', function (event) {
+        event.preventDefault();
+        var sel = editor.getSelection(true);
+        var url = prompt('Url')
+        editor.insertEmbed(sel.index, 'video', url);
+    }, false);
+
+    //save form
+    document.getElementById('form-save').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var h = editor.container.children[0].innerHTML;
+        document.getElementById('target-editor').value = h;
+        document.getElementById('form-save').submit();
+    });
+</script>

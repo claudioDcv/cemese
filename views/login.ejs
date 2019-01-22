@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <%- include('includes/links'); -%>
+    <style>
+        .main-div {
+        max-width: 90%;
+        width: 400px;
+        margin: auto;
+        }
+
+        .login-form .form-group {
+        margin-bottom:10px;
+        }
+        .login-form{ text-align:center;}
+</style>
+</head>
+
+<body>
+    <%- include('includes/menus'); -%>
+    <div class="container">
+        <div class="login-form">
+            <div class="main-div card mt-4">
+                <div class="card-header">
+                    Login
+                </div>
+                <div class="card-body">
+                    <form id="Login" method="post" action="/cemese/login">
+                        <div class="form-group">
+                            <input type="text" name="username" class="form-control" id="inputEmail" placeholder="Email Address">
+
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

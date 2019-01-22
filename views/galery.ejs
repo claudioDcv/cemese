@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <%- include('includes/links'); -%>
+</head>
+
+<body>
+  <%- include('includes/menus'); -%>
+  <div class="container">
+    <h1>
+      <%= title %>
+    </h1>
+    <div class="card mb-4">
+      <div class="card-body">
+        <form action='/cemese/upload' method="post" enctype="multipart/form-data">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" name="image">
+            <label class="custom-file-label" id="customFile-name" for="customFile">Choose file</label>
+            <img id="customFile-thumbnail" src="/cemese/display/image?filename=n&mimetype=n" alt="your image" />
+          </div>
+          <input type="submit" class="btn btn-success mt-2" value="Enviar" />
+        </form>
+      </div>
+    </div>
+    <div class="row cemese-galery">
+      <% images.forEach(function(image){ %>
+      <div class="col-md-3 mb-2 col-lg-2">
+        <div class="card">
+          <img src="<%= image.uri %>" class="card-img-top" alt="<%= image.originalname  %>">
+          <div class="card-footer">
+            <div class="btn-group">
+              <a href="/cemese/galery/delete?id=<%= image.id %>" class="btn-sm btn btn-outline-danger">
+                <i class="icofont-ui-delete"></i></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <% }); %>
+      </ul>
+    </div>
+    <script>
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var imgData = input.files[0];
+            var imgDataName = input.files[0].name;
+            var img = document.getElementById('customFile-thumbnail');
+            var imgName = document.getElementById('customFile-name');
+            imgName.innerText = imgDataName;
+            img.src = e.target.result;
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      document.getElementById('customFile').addEventListener('change', function () {
+        readURL(this);
+      }, false);
+    </script>
+</body>
+
+</html>
