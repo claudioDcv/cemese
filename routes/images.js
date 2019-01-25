@@ -1,6 +1,8 @@
 var express = require('express');
 var fs = require('fs');
 var path = require('path');
+
+var { DATA_SITE } = require('../config/env')
 var { UPLOAD_PATH } = require('../config/upload');
 var router = express.Router();
 var { getAll, getById, deleteById } = require('../model/images');
@@ -20,7 +22,7 @@ router.get('/', function (req, res, next) {
       uri: `/cemese/display/image?filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
     }))
     res.render('galery', {
-      title: 'Express',
+      dataSite: DATA_SITE,
       images: imgs,
       principalMenu,
       metadata: res.metadata

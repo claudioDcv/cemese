@@ -15,3 +15,14 @@ exports.dbTest = () => new Promise((resolve, reject) => {
             reject(error);
         });
 });
+// REDIS
+/*
+sudo systemctl enable redis-server.service
+sudo /etc/init.d/redis-server enable
+
+sudo vim /etc/redis/redis.conf
+maxmemory 256mb
+maxmemory-policy allkeys-lru
+
+sudo /etc/init.d/redis-server restart
+*/

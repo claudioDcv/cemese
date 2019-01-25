@@ -30,3 +30,4 @@ SET column1 = value1,
 WHERE
  condition;
 */
+exports.getLikeFriendlyUrl = friendlyUrl => db.any('select friendly_url from posts p where friendly_url like \'' + friendlyUrl + '%\' order by friendly_url', { friendlyUrl });

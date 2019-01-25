@@ -35,3 +35,12 @@ inner join account on account.user_id = account_role.user_id
 where username = 'claudio';
 */
 exports.getByIdUsername = username => db.any('select * from "role" inner join account_role on account_role.role_id = "role".role_id inner join account on account.user_id = account_role.user_id where username = ${username}', { username });
+
+/*
+var bcrypt = require('bcrypt');
+var { SECRET, SALT } = require('./config/env')
+// PASSWORD
+console.log(bcrypt.hashSync('1234.qwer', SALT))
+const s = '$2a$10$4ZtpiLeIybWeoU2kHlCRiuX9Lc0qG3s.0LBPsoEymVfkcF3HOjtGy'
+console.log(bcrypt.compareSync('1234.qwer', s))
+*/

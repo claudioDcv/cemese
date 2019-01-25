@@ -3,7 +3,7 @@
 
 <head>
   <title>
-    <%= title %>
+    <%= dataSite.title %>
   </title>
   <%- include('includes/links'); -%>
 </head>
@@ -11,14 +11,12 @@
 <body>
   <%- include('includes/menus'); -%>
   <div class="container">
+    <h1>
+      <%= dataSite.title %>
+    </h1>
     <div class="row">
-      <div class="col-md-12">
-        <h1>
-          <%= title %>
-        </h1>
-      </div>
-      <div class="col-md-12">
-        Vista publica
+      <div class="col-md-3 mb-2">
+        Dashboard
       </div>
     </div>
   </div>

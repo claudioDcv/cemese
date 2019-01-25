@@ -1,4 +1,9 @@
 var express = require('express');
+var bcrypt = require('bcrypt');
+var { getAll } = require('../model/posts');
+
+var { DATA_SITE } = require('../config/env')
+
 var { getAllByMenuId } = require('../model/menus');
 var { login } = require('../auth/authentication');
 
@@ -6,11 +11,15 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', (req, res) => {
-    getAllByMenuId(1).then(principalMenu => {
-        res.render('index', {
-            title: 'Express',
-            principalMenu,
-            metadata: res.metadata
+    let principalMenu = [];
+    getAllByMenuId(1).then(menu => {
+        principalMenu = menu;
+        return getAll();
+    }).then(posts => {
+        res.render('site/index', {
+            dataSite: DATA_SITE,
+            posts,
+            principalMenu
         });
     }).catch(err => {
         res.send(err);
@@ -19,8 +28,8 @@ router.get('/', (req, res) => {
 
 router.get('/login', (req, res) => {
     getAllByMenuId(1).then(principalMenu => {
-        res.render('login', {
-            title: 'Express',
+        res.render('site/login', {
+            dataSite: DATA_SITE,
             principalMenu,
             metadata: res.metadata
         });
@@ -29,27 +38,26 @@ router.get('/login', (req, res) => {
     })
 });
 
-router.post('/login', (req, res) => {
-    console.log('>> 1');
+router.get('/dashboard', (req, res) => {
+    getAllByMenuId(1).then(principalMenu => {
+        res.render('dashboard', {
+            dataSite: DATA_SITE,
+            principalMenu,
+        });
+    }).catch(err => {
+        res.send(err);
+    })
+});
 
+router.post('/login', (req, res) => {
     login(req.body)
         .then(data => {
-            console.log('>> 5');
-            var randomNumber = Math.random().toString();
-            randomNumber = randomNumber.substring(2, randomNumber.length);
-            res.cookie('cookieName', randomNumber, {
-                maxAge: 900000,
-                httpOnly: true,
-            });
-            res.cookie('x-api-token', data.username, {
-                maxAge: 900000,
-                httpOnly: true,
-            })
-            res.cookie('hasLogin', true, {
-                maxAge: 900000,
-                httpOnly: true,
-            })
-            res.redirect('/cemese/posts');
+            if (bcrypt.compareSync(req.body.password, data.password)) {
+                req.session.user = data.username;
+                res.redirect('/cemese/dashboard');
+            } else {
+                res.redirect('/cemese/login');
+            }
         })
         .catch(err => {
             res.redirect('/cemese/login');
@@ -57,16 +65,14 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-    res.clearCookie('x-api-token');
-    res.clearCookie('cookieName');
-    res.clearCookie('hasLogin');
+    res.clearCookie('user_sid');
     res.redirect('/cemese');
 });
 
 router.get('/forbidden', (req, res) => {
     getAllByMenuId(1).then(principalMenu => {
         res.render('forbidden', {
-            title: 'forbidden',
+            dataSite: DATA_SITE,
             principalMenu,
             metadata: res.metadata
         });

@@ -1,4 +1,6 @@
 module.exports = (uri) => {
+    console.log('-0---------------------')
+    console.log(uri)
     let u = uri;
 
     let uArr = u.split('-');

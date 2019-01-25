@@ -1,9 +1,10 @@
 var express = require('express');
 
+var { DATA_SITE } = require('../config/env')
 var makeFriendlyUrl = require('../helpers/makeFriendlyUrl');
 var nodeFriendlyUrl = require('../helpers/node-friendly-url');
 var { getAllByMenuId } = require('../model/menus');
-var { getAll, add, getByFriendlyUrl, deleteById, updateById } = require('../model/posts');
+var { getAll, add, getByFriendlyUrl, deleteById, updateById, getLikeFriendlyUrl } = require('../model/posts');
 
 var router = express.Router();
 
@@ -15,10 +16,9 @@ router.get('/', (req, res) => {
         return getAll();
     }).then(posts => {
         res.render('posts', {
-            title: 'Posts',
+            dataSite: DATA_SITE,
             posts,
-            principalMenu,
-            metadata: res.metadata
+            principalMenu
         });
     }).catch(err => {
         res.send(err);
@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
 router.get('/create', (req, res) => {
     getAllByMenuId(1).then(principalMenu => {
         res.render('createPost', {
-            title: 'Posts',
+            dataSite: DATA_SITE,
             principalMenu,
             metadata: res.metadata
         });
@@ -44,7 +44,7 @@ router.get('/edit/:post', (req, res) => {
         return getByFriendlyUrl(req.params.post);
     }).then(post => {
         res.render('editPost', {
-            title: 'Posts',
+            dataSite: DATA_SITE,
             principalMenu,
             post: post[0],
             metadata: res.metadata
@@ -61,7 +61,7 @@ router.get('/view/:post', (req, res) => {
         return getByFriendlyUrl(req.params.post);
     }).then(post => {
         res.render('viewPost', {
-            title: 'Posts',
+            dataSite: DATA_SITE,
             principalMenu,
             post: post[0],
             metadata: res.metadata
@@ -73,41 +73,23 @@ router.get('/view/:post', (req, res) => {
 
 router.post('/create', (req, res) => {
     const date = new Date();
-    try {
-        const data = { ...req.body, create_at: date };
-        data.friendly_url = nodeFriendlyUrl(data.title, 300)
-        // data.friendly_url = makeFriendlyUrl(data.friendly_url)
-        // sera muy constoso si se crean muchas veces un elemento con el mismo nombre
-        var veriryUnique = (req, res, data) => {
-            var test = (d) => {
-                d.friendly_url = makeFriendlyUrl(d.friendly_url)
-                getByFriendlyUrl(d.friendly_url).then(e => {
-                    if (e.length === 0) {
-                        add(d).then(da => {
-                            res.redirect('/cemese/posts?type=redirect&result=Post Creado Con Exito');
-                        }).catch(err => {
-                            res.send(err)
-                        })
-                    } else {
-                        test(d);
-                    }
-                })
-            }
-            test(data);
-        }
-        
-        veriryUnique(req, res, data)
-        
-    } catch (err) {
-        res.send(err);
-    }
+    const data = { ...req.body, create_at: date };
+    data.friendly_url = nodeFriendlyUrl(data.title, 300)
+    friendlify(data.friendly_url).then(e => {
+        data.friendly_url = e
+        add(data).then(da => {
+            res.redirect('/cemese/posts?type=redirect&result=Post Creado Con Exito');
+        }).catch(err => {
+            res.send(err)
+        })
+
+    })
 });
 
 router.post('/update', (req, res) => {
     try {
         const data = { ...req.body };
         data.friendly_url = nodeFriendlyUrl(data.title, 300)
-        console.log(data)
         updateById(data).then(data => {
             res.redirect('/cemese/posts?type=redirect&result=Post Actualizado Con Exito');
         }).catch(err => {
@@ -126,5 +108,48 @@ router.get('/delete', (req, res, next) => {
         res.redirect('/cemese/posts?type=redirect&result=Error en DB');
     })
 });
+
+
+const friendlify = t => {
+    return new Promise((resolve, reject) => {
+        getByFriendlyUrl(t).then(e => {
+            var reg = /^\d+$/;
+            if (e.length > 0) {
+                const name = t + '-1'
+                var rr = (nn) => {
+                    getByFriendlyUrl(nn).then(ee => {
+                        if (ee.length > 0) {
+                            var eArr = nn.split('-')
+                            var lastElmArr = eArr[eArr.length - 1]
+                            if (reg.test(lastElmArr)) {
+                                var sig = (lastElmArr * 1) + 1
+                                eArr[eArr.length - 1] = sig
+                                rr(eArr.join('-'))
+                            } else {
+                                rr(nn + '-1')
+                            }
+                        } else {
+                            resolve(nn)
+                        }
+                    }).catch(err => {
+                        reject(err);
+                    })
+                }
+                rr(name)
+
+            } else {
+                // Crear Normal
+                resolve(t)
+            }
+
+
+        }).catch(err => {
+            reject(err);
+        })
+    })
+};
+
+
+
 
 module.exports = router;

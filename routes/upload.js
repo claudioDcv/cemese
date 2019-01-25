@@ -1,5 +1,7 @@
 var express = require('express');
 const sharp = require('sharp');
+
+var { DATA_SITE } = require('../config/env')
 var path = require('path');
 var { upload, UPLOAD_PATH } = require('../config/upload');
 var { add } = require('../model/images');
