@@ -7,18 +7,39 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('', (req, res) => {
-    const { filename, mimetype } = req.query;
+    const { filename, mimetype, size } = req.query;
 
     const m = decodeURIComponent(mimetype);
     const f = decodeURIComponent(filename);
-    if (!fs.existsSync(path.join(UPLOAD_PATH, f))) {
+    const s = decodeURIComponent(size);
+
+    let PATH = UPLOAD_PATH
+    switch (s) {
+        case '':
+
+            break;
+        case 'min':
+            PATH += '/min'
+            break;
+        case 'med':
+            PATH += '/med'
+            break;
+        case 'big':
+            PATH += '/big'
+            break;
+        default:
+            break;
+    }
+
+
+    if (!fs.existsSync(path.join(PATH, f))) {
         const file = path.join(process.cwd(), 'public', 'images', 'noimage.png')
         res.setHeader('Content-Type', 'image/png');
         fs.createReadStream(file).pipe(res);
     } else {
         try {
             res.setHeader('Content-Type', m);
-            fs.createReadStream(path.join(UPLOAD_PATH, f)).pipe(res);
+            fs.createReadStream(path.join(PATH, f)).pipe(res);
         } catch (err) {
             res.sendStatus(400);
         }

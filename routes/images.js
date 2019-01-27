@@ -19,6 +19,7 @@ router.get('/', function (req, res, next) {
   }).then(images => {
     const imgs = images.map(e => ({
       ...e,
+      thumbnail: `/cemese/display/image?size=min&filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
       uri: `/cemese/display/image?filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
     }))
     res.render('galery', {
@@ -37,12 +38,22 @@ router.get('/delete', function (req, res, next) {
   getById(req.query.id).then(data => {
     if (data[0]) {
       // res.send(data[0])
-      const file = path.join(process.cwd(), UPLOAD_PATH, data[0].filename)
+      const file = path.join(process.cwd(), UPLOAD_PATH, 'original', req.file.filename)
+      const fileMin = path.join(process.cwd(), UPLOAD_PATH, 'min', req.file.filename)
+
       if (fs.existsSync(file)) {
         // FILE SYSTEM
         fs.unlink(file, (err) => {
           if (err) throw err;
           console.log(file + ' was deleted');
+        });
+      }
+      // DELETE THUMBNAIL 200 * 200
+      if (fs.existsSync(fileMin)) {
+        // FILE SYSTEM
+        fs.unlink(fileMin, (err) => {
+          if (err) throw err;
+          console.log(fileMin + ' was deleted');
         });
       }
       // DB
@@ -65,6 +76,7 @@ router.get('/json', function (req, res, next) {
   getAll().then(images => {
     const imgs = images.map(e => ({
       ...e,
+      thumbnail: `/cemese/display/image?size=min&filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
       uri: `/cemese/display/image?filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
     }))
     res.send(imgs);

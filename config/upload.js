@@ -11,4 +11,4 @@ const imageFilter = function (req, file, cb) {
 const UPLOAD_PATH = 'uploads';
 
 exports.UPLOAD_PATH = UPLOAD_PATH;
-exports.upload = multer({ dest: `${UPLOAD_PATH}/`, fileFilter: imageFilter }); // multer configuration
+exports.upload = multer({ dest: `${UPLOAD_PATH}/original/`, fileFilter: imageFilter }); // multer configuration

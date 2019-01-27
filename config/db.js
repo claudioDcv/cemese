@@ -25,4 +25,5 @@ maxmemory 256mb
 maxmemory-policy allkeys-lru
 
 sudo /etc/init.d/redis-server restart
+sudo /etc/init.d/redis-server start
 */

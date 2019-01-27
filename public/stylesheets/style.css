@@ -108,6 +108,29 @@ p {
   margin-bottom: 0;
 }
 
+.custom-file {
+  border: solid 1px #d8d8d8;
+  position: relative;
+  height: 150px;
+  width: 150px;
+  text-align: center;
+  line-height: 135px;
+  background: #f7f7f7;
+  border-radius: 5px;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.custom-file .custom-file-input {
+  position: absolute;
+  height: 100%;
+  opacity: 0;
+}
+
+.custom-file label {
+  opacity: 0;
+}
+
 @media screen and (min-width: 670px) {
   .cemese-mobile { display: none; }
   .cemese-desktop { display: block; }

@@ -30,7 +30,7 @@
       <% images.forEach(function(image){ %>
       <div class="col-md-3 mb-2 col-lg-2">
         <div class="card">
-          <img src="<%= image.uri %>" class="card-img-top" alt="<%= image.originalname  %>">
+          <img src="<%= image.thumbnail %>" class="card-img-top" alt="<%= image.originalname  %>">
           <div class="card-footer">
             <div class="btn-group">
               <a href="/cemese/galery/delete?id=<%= image.id %>" class="btn-sm btn btn-outline-danger">

@@ -1,6 +1,7 @@
 var express = require('express');
 const sharp = require('sharp');
 
+var fs = require('fs')
 var { DATA_SITE } = require('../config/env')
 var path = require('path');
 var { upload, UPLOAD_PATH } = require('../config/upload');
@@ -13,15 +14,18 @@ var router = express.Router();
 /* GET users listing. */
 router.post('/', upload.single('image'), async (req, res) => {
   try {
-    const file = path.join(process.cwd(), UPLOAD_PATH, req.file.filename)
+    const file = path.join(process.cwd(), UPLOAD_PATH, 'original', req.file.filename)
+    const fileMin = path.join(process.cwd(), UPLOAD_PATH, 'min', req.file.filename)
 
-    const f = sharp(req.file)
-      .resize(400)
-      .toFile(file + '-400', (err, info) => {
-        console.log(info)
+    // thumbnail 200 * 200
+    sharp(file).resize(200, 200).toBuffer(function (err, buf) {
+      if (err) return next(err)
+      fs.writeFile(fileMin, buf, function (err) {
+        if (err) {
+          return console.log(err);
+        }
       });
-
-    console.log(file)
+    })
 
     add({
       originalname: req.file.originalname,
