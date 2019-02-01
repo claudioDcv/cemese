@@ -1,6 +1,6 @@
 var multer = require('multer');
 
-const imageFilter = function (req, file, cb) {
+const imageFilter = (req, file, cb) => {
     // accept image only
     if (!file.originalname.toLocaleLowerCase().match(/\.(jpg|jpeg|png|gif)$/)) {
         return cb(new Error('Only image files are allowed!'), false);

@@ -131,6 +131,11 @@ p {
   opacity: 0;
 }
 
+hr {
+  background: rgb(0, 123, 255);
+  width: 100%;
+}
+
 @media screen and (min-width: 670px) {
   .cemese-mobile { display: none; }
   .cemese-desktop { display: block; }

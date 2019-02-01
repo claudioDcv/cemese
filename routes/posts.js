@@ -1,12 +1,11 @@
-var express = require('express');
+const express = require('express');
 
-var { DATA_SITE } = require('../config/env')
-var makeFriendlyUrl = require('../helpers/makeFriendlyUrl');
-var nodeFriendlyUrl = require('../helpers/node-friendly-url');
-var { getAllByMenuId } = require('../model/menus');
-var { getAll, add, getByFriendlyUrl, deleteById, updateById, getLikeFriendlyUrl } = require('../model/posts');
+const { DATA_SITE } = require('../config/env')
+const nodeFriendlyUrl = require('../helpers/node-friendly-url');
+const { getAllByMenuId } = require('../model/menus');
+const { getAll, add, getByFriendlyUrl, deleteById, updateById, getLikeFriendlyUrl } = require('../model/posts');
 
-var router = express.Router();
+const router = express.Router();
 
 /* GET users listing. */
 router.get('/', (req, res) => {
@@ -109,7 +108,7 @@ router.get('/delete', (req, res, next) => {
     })
 });
 
-
+// METODO QUE CREA LA URI AMIGABLE y se preocupa que no se repita
 const friendlify = t => {
     return new Promise((resolve, reject) => {
         getByFriendlyUrl(t).then(e => {
@@ -122,8 +121,7 @@ const friendlify = t => {
                             var eArr = nn.split('-')
                             var lastElmArr = eArr[eArr.length - 1]
                             if (reg.test(lastElmArr)) {
-                                var sig = (lastElmArr * 1) + 1
-                                eArr[eArr.length - 1] = sig
+                                eArr[eArr.length - 1] = (lastElmArr * 1) + 1
                                 rr(eArr.join('-'))
                             } else {
                                 rr(nn + '-1')
@@ -136,20 +134,14 @@ const friendlify = t => {
                     })
                 }
                 rr(name)
-
             } else {
                 // Crear Normal
                 resolve(t)
             }
-
-
         }).catch(err => {
             reject(err);
         })
     })
 };
-
-
-
 
 module.exports = router;

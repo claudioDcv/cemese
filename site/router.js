@@ -1,5 +1,5 @@
-var indexRouter = require('../routes');
-var siteRouter = require('../routes/site');
+const indexRouter = require('../routes');
+const siteRouter = require('../routes/site');
 
 module.exports = (app) => {
     app.use('/cemese/site', siteRouter);

@@ -1,9 +1,9 @@
-var express = require('express');
-var fs = require('fs');
-var path = require('path');
-var { UPLOAD_PATH } = require('../config/upload');
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const { UPLOAD_PATH } = require('../config/upload');
 
-var router = express.Router();
+const router = express.Router();
 
 /* GET home page. */
 router.get('', (req, res) => {
@@ -15,8 +15,8 @@ router.get('', (req, res) => {
 
     let PATH = UPLOAD_PATH
     switch (s) {
-        case '':
-
+        case 'original':
+            PATH += '/original'
             break;
         case 'min':
             PATH += '/min'
@@ -30,7 +30,6 @@ router.get('', (req, res) => {
         default:
             break;
     }
-
 
     if (!fs.existsSync(path.join(PATH, f))) {
         const file = path.join(process.cwd(), 'public', 'images', 'noimage.png')

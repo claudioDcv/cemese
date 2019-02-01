@@ -2,21 +2,21 @@ const express = require('express');
 
 const { DATA_SITE } = require('../config/env')
 const { getAllByMenuId } = require('../model/menus');
-const { getByFriendlyUrl } = require('../model/posts');
+const { getAll } = require('../model/categories');
 
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/posts/view/:post', (req, res) => {
+router.get('/', (req, res) => {
     let principalMenu = [];
     getAllByMenuId(1).then(menu => {
         principalMenu = menu;
-        return getByFriendlyUrl(req.params.post);
-    }).then(post => {
-        res.render('site/viewPost', {
+        return getAll();
+    }).then(categories => {
+        res.render('categories', {
             dataSite: DATA_SITE,
             principalMenu,
-            post: post[0],
+            categories,
             metadata: res.metadata
         });
     }).catch(err => {

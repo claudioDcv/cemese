@@ -1,15 +1,20 @@
-var express = require('express');
-var fs = require('fs');
-var path = require('path');
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
 
-var { DATA_SITE } = require('../config/env')
-var { UPLOAD_PATH } = require('../config/upload');
-var router = express.Router();
-var { getAll, getById, deleteById } = require('../model/images');
-var { getAllByMenuId } = require('../model/menus');
+const { DATA_SITE } = require('../config/env')
+const { UPLOAD_PATH } = require('../config/upload');
+const router = express.Router();
+const { getAll, getById, deleteById } = require('../model/images');
+const { getAllByMenuId } = require('../model/menus');
 
+
+const makeImageUri = e => ({
+  thumbnail: `/cemese/display/image?size=min&filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
+  uri: `/cemese/display/image?size=original&filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
+})
 // Views
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
   // DB
   let principalMenu = [];
 
@@ -17,50 +22,38 @@ router.get('/', function (req, res, next) {
     principalMenu = menus;
     return getAll();
   }).then(images => {
-    const imgs = images.map(e => ({
-      ...e,
-      thumbnail: `/cemese/display/image?size=min&filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
-      uri: `/cemese/display/image?filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
-    }))
+    const imgs = images.map(e => ({ ...e, ...makeImageUri(e) }))
     res.render('galery', {
       dataSite: DATA_SITE,
       images: imgs,
       principalMenu,
       metadata: res.metadata
     });
-  }).catch(err => {
-    res.send(err);
-  })
+  }).catch(err => res.send(err))
 });
 
-// Functionalities
-router.get('/delete', function (req, res, next) {
+router.get('/delete', (req, res, next) => {
   getById(req.query.id).then(data => {
-    if (data[0]) {
-      // res.send(data[0])
-      const file = path.join(process.cwd(), UPLOAD_PATH, 'original', req.file.filename)
-      const fileMin = path.join(process.cwd(), UPLOAD_PATH, 'min', req.file.filename)
+    if (data.length === 1) {
+      const image = data[0]
+      const file = path.join(process.cwd(), UPLOAD_PATH, 'original', image.filename)
+      const fileMed = path.join(process.cwd(), UPLOAD_PATH, 'med', image.filename)
+      const fileMin = path.join(process.cwd(), UPLOAD_PATH, 'min', image.filename)
 
       if (fs.existsSync(file)) {
-        // FILE SYSTEM
-        fs.unlink(file, (err) => {
-          if (err) throw err;
-          console.log(file + ' was deleted');
-        });
+        fs.unlink(file, (err) => { if (err) throw err; });
       }
-      // DELETE THUMBNAIL 200 * 200
+
+      if (fs.existsSync(fileMed)) {
+        fs.unlink(fileMed, (err) => { if (err) throw err; });
+      }
       if (fs.existsSync(fileMin)) {
-        // FILE SYSTEM
-        fs.unlink(fileMin, (err) => {
-          if (err) throw err;
-          console.log(fileMin + ' was deleted');
-        });
+        fs.unlink(fileMin, (err) => { if (err) throw err; });
       }
       // DB
       deleteById(data[0].id).then(data => {
         res.redirect('/cemese/galery?type=redirect&result=Archivo Eliminado Con Exito');
       }).catch(err => {
-        console.log(err)
         res.redirect('/cemese/galery?type=redirect&result=Error en DB o archivo no existe');
       })
 
@@ -69,19 +62,16 @@ router.get('/delete', function (req, res, next) {
   }).catch(err => {
     res.send(err);
   })
-});
+})
 
 // JSON
-router.get('/json', function (req, res, next) {
+router.get('/json', (req, res, next) => {
   getAll().then(images => {
-    const imgs = images.map(e => ({
-      ...e,
-      thumbnail: `/cemese/display/image?size=min&filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
-      uri: `/cemese/display/image?filename=${encodeURIComponent(e.filename)}&mimetype=${encodeURIComponent(e.mimetype)}`,
-    }))
+    const imgs = images.map(e => ({ ...e, ...makeImageUri(e) }))
     res.send(imgs);
   }).catch(err => {
     res.send(err);
   })
 });
+
 module.exports = router;

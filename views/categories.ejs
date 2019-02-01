@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= dataSite.title %>
+  </title>
+  <%- include('includes/links'); -%>
+</head>
+
+<body>
+  <%- include('includes/menus'); -%>
+  <div class="container">
+    <h1>
+      <%= dataSite.title %>
+    </h1>
+    <a class="btn btn-primary mb-2" href="/cemese/categories/create">Crear</a>
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-group">
+          <% categories.forEach(function(category){ %>
+          <li class="list-group-item list-group-item-action">
+              <%= category.title %>
+              <span class="badge badge-secondary"><%= category.id %>) <%= category.friendly_url %></span>
+          </li>
+          <% }); %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+
+</body>
+
+</html>

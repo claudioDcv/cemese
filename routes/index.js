@@ -1,13 +1,13 @@
-var express = require('express');
-var bcrypt = require('bcrypt');
-var { getAll } = require('../model/posts');
+const express = require('express');
+const bcrypt = require('bcrypt');
+const { getAll } = require('../model/posts');
 
-var { DATA_SITE } = require('../config/env')
+const { DATA_SITE } = require('../config/env')
 
-var { getAllByMenuId } = require('../model/menus');
-var { login } = require('../auth/authentication');
+const { getAllByMenuId } = require('../model/menus');
+const { login } = require('../auth/authentication');
 
-var router = express.Router();
+const router = express.Router();
 
 /* GET users listing. */
 router.get('/', (req, res) => {

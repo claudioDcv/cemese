@@ -1,18 +1,5 @@
 var { getByIdUsername } = require('../model/auth');
-var { parseCookies } = require('../helpers/parseCookies');
 
-// middleware for authentication
-/*
-module.exports = async function authorize(req, res, next) {
-    const apiToken = req.headers['x-api-token'];
-    
-    // set user on-success
-    request.user = await req.db.users.findByApiKey(apiToken);
-       
-    // always continue to next middleware
-    next();
-  }
-  */
 exports.sessionChecker = (req, res, next) => {
     if (req.session.user && req.cookies.user_sid) {
         next();
@@ -21,16 +8,14 @@ exports.sessionChecker = (req, res, next) => {
     }
 };
 
-exports.login = data => new Promise((res, rej) => {
+exports.login = data => new Promise((resolve, reject) => {
     getByIdUsername(data.username)
         .then(dat => {
             if (dat.length === 1) {
-                res(dat[0]);
+                resolve(dat[0]);
             } else {
-                rej(dat);
+                reject(dat);
             }
         })
-        .catch(err => {
-            rej(err);
-        })
+        .catch(err => reject(err))
 });
