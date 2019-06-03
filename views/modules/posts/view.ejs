@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <title>
+        <%= dataSite.title %>
+    </title>
+    <%- include('../../includes/links'); -%>
+</head>
+
+<body>
+    <%- include('../../includes/menus'); -%>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>
+                        <%= post.title %>
+                    </h1>
+                    <small>
+          publicado el: <%= new Date(post.create_at).toLocaleString() %></small>
+                    <hr />
+                </div>
+                <div class="col-md-12 post-container mb-4">
+                    <%- post.text %>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

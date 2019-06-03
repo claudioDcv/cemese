@@ -1,0 +1,134 @@
+body {
+    padding: 25px;
+}
+
+#editor {
+    border: 1px solid #ccc;
+}
+
+#counter {
+    border: 1px solid #ccc;
+    border-width: 0px 1px 1px 1px;
+    color: #aaa;
+    padding: 5px 15px;
+    text-align: right;
+}
+
+.ql-test:after {
+    content: "";
+    display: block;
+    background-image: url(/modules/editor/assets/attach.png);
+    width: 16px;
+    height: 16px;
+}
+
+.galery-container {
+    position: fixed;
+    z-index: 10;
+    background: #0000008c;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+.galery-modal {
+    position: fixed;
+    z-index: 1;
+    background: #ffffff;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    height: 90%;
+    width: 90%;
+    margin: auto;
+}
+
+.galery-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 10px;
+    background: #efefef;
+    font-family: sans-serif;
+    color: #03A9F4;
+    border-radius: 50%;
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 1;
+}
+
+.galery-row {
+    clear: both;
+    padding: 15px;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.galery-card {
+    width: 90px;
+    height: 90px;
+    float: left;
+    margin: 15px;
+    position: relative;
+}
+
+.galery-card img {
+    width: 100%;
+    height: 100%;
+}
+
+.galery-button {
+    bottom: 0;
+    position: absolute;
+    width: 35px;
+    height: 35px;
+}
+
+.galery-button-prev {
+    left: 0;
+}
+
+.galery-button-next {
+    left: 35px;
+}
+
+.galery-card-btn {
+    position: absolute;
+    bottom: 0;
+    width: 30px;
+    height: 30px;
+    background: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 0;
+}
+
+.galery-card-btn-original {
+    right: 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.galery-card-btn-med {
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+
+.galery-card-btn-min {
+    left: 0;
+    border-radius: 5px 0 0 5px;
+}
+
+#editor {}
+
+.editor-button {}
+
+.editor-button-bold {
+    font-weight: 600;
+}

@@ -27,6 +27,13 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
+    /*
+        bcrypt.genSalt(12, function(err, salt) {
+            bcrypt.hash('1234qwer', salt, function(err, hash) {
+                console.log(hash)
+            });
+        });
+    */
     getAllByMenuId(1).then(principalMenu => {
         res.render('site/login', {
             dataSite: DATA_SITE,

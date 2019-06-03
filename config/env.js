@@ -1,7 +1,7 @@
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 
-exports.DB_STRING = 'postgres://cemese_user:1234qwer@localhost:5432/cemese'
+exports.DB_STRING = 'postgres://cemese_consumer:1234qwer@localhost:5432/cemese'
 
 // StVKrwZgEYpC7nAf6tAthYWobemcYTkvMCKpFbkA
 // $2y$12$FXnxk7UPZ9UJ2PkGmroVe.4psjC4aAVDlseOkosrrhk7KKR6c92YC

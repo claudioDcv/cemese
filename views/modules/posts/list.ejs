@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= dataSite.title %>
+    </title>
+    <%- include('../../includes/links'); -%>
+</head>
+
+<body>
+    <%- include('../../includes/menus'); -%>
+        <div class="container">
+            <h1>
+                <%= dataSite.title %>
+            </h1>
+            <a class="btn btn-primary mb-2" href="/cemese/posts/create">Crear</a>
+            <div class="row cemese-galery">
+                <% posts.forEach(function(post){ %>
+                    <div class="col-md-3 mb-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <%= post.title %>
+                            </div>
+                            <div class="card-body">
+                                <%= new Date(post.create_at).toLocaleDateString() %>
+                                    <%= post.friendly_url %>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group">
+                                    <a href="/cemese/posts/view/<%= post.friendly_url %>" class="btn-sm btn btn-outline-primary">
+                                        <i class="icofont-eye-alt"></i></a>
+                                    <a href="/cemese/posts/edit/<%= post.friendly_url %>" class="btn-sm btn btn-outline-info">
+                                        <i class="icofont-ui-edit"></i></a>
+                                    <a href="/cemese/posts/delete?id=<%= post.id %>" class="btn-sm btn btn-outline-danger">
+                                        <i class="icofont-ui-delete"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <% }); %>
+                        </ul>
+            </div>
+        </div>
+
+</body>
+
+</html>

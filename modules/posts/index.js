@@ -1,9 +1,9 @@
 const express = require('express');
 
-const { DATA_SITE } = require('../config/env')
-const nodeFriendlyUrl = require('../helpers/node-friendly-url');
-const { getAllByMenuId } = require('../model/menus');
-const { getAll, add, getByFriendlyUrl, deleteById, updateById, getLikeFriendlyUrl } = require('../model/posts');
+const { DATA_SITE } = require('../../config/env')
+const nodeFriendlyUrl = require('../../helpers/node-friendly-url');
+const { getAllByMenuId } = require('../../model/menus');
+const { getAll, add, getByFriendlyUrl, deleteById, updateById, getLikeFriendlyUrl } = require('../../model/posts');
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
         principalMenu = menu;
         return getAll();
     }).then(posts => {
-        res.render('posts', {
+        res.render('modules/posts/list', {
             dataSite: DATA_SITE,
             posts,
             principalMenu
@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
 
 router.get('/create', (req, res) => {
     getAllByMenuId(1).then(principalMenu => {
-        res.render('createPost', {
+        res.render('modules/posts/create', {
             dataSite: DATA_SITE,
             principalMenu,
             metadata: res.metadata
@@ -42,7 +42,7 @@ router.get('/edit/:post', (req, res) => {
         principalMenu = menu;
         return getByFriendlyUrl(req.params.post);
     }).then(post => {
-        res.render('editPost', {
+        res.render('modules/posts/edit', {
             dataSite: DATA_SITE,
             principalMenu,
             post: post[0],
@@ -59,7 +59,7 @@ router.get('/view/:post', (req, res) => {
         principalMenu = menu;
         return getByFriendlyUrl(req.params.post);
     }).then(post => {
-        res.render('viewPost', {
+        res.render('modules/posts/view', {
             dataSite: DATA_SITE,
             principalMenu,
             post: post[0],
@@ -72,8 +72,10 @@ router.get('/view/:post', (req, res) => {
 
 router.post('/create', (req, res) => {
     const date = new Date();
-    const data = { ...req.body, create_at: date };
+    const data = {...req.body, create_at: date };
     data.friendly_url = nodeFriendlyUrl(data.title, 300)
+
+    console.log(data)
     friendlify(data.friendly_url).then(e => {
         data.friendly_url = e
         add(data).then(da => {
@@ -87,7 +89,7 @@ router.post('/create', (req, res) => {
 
 router.post('/update', (req, res) => {
     try {
-        const data = { ...req.body };
+        const data = {...req.body };
         data.friendly_url = nodeFriendlyUrl(data.title, 300)
         updateById(data).then(data => {
             res.redirect('/cemese/posts?type=redirect&result=Post Actualizado Con Exito');
@@ -143,5 +145,9 @@ const friendlify = t => {
         })
     })
 };
+
+router.get('/editor', (req, res) => {
+    res.render('editor');
+});
 
 module.exports = router;

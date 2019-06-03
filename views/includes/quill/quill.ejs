@@ -7,17 +7,33 @@
     </div>
 </div>
 <script>
+
+    // Implement and register module
+    Quill.register('modules/counter', function (quill, options) {
+        var container = document.querySelector('#counter');
+        quill.on('text-change', function () {
+            var text = quill.getText();
+            // There are a couple issues with counting words
+            // this way but we'll fix these later
+            container.innerText = text.split(/\s+/).length;
+        });
+    });
+
     var imageHandler = function (event) {
         debugger;
     }
     var toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'image'];
     var options = {
         debug: 'info',
-        placeholder: 'Compose an epic...',
+        placeholder: 'Inspirece...',
         readOnly: false,
         theme: 'snow',
         modules: {
-            toolbar: '#toolbar'
+            toolbar: '#toolbar',
+            imageResize: {
+                displaySize: true,
+                modules: ['Resize', 'DisplaySize', 'Toolbar']
+            }
         }
     };
     var editor = new Quill('#editor', options);
@@ -28,11 +44,19 @@
         document.getElementById('image-galery').className = "image-galery";
     }, false);
 
-    var clickSetImage = function (event) {
+
+    var insertImageInEditor = function (event) {
         event.preventDefault();
         var sel = editor.getSelection(true);
         editor.insertEmbed(sel.index, 'image', event.target.dataset.src);
         document.getElementById('image-galery').className = "image-galery";
+    }
+
+    var clickSetImage = function (event) {
+        event.preventDefault();
+        var parent = event.target.parentElement
+
+        // parent.children[1].style.display = 'block'
     };
 
     var btn = document.getElementById('insert-image-tool')
@@ -45,23 +69,21 @@
         }).then(e => {
             e.json().then(f => {
                 f.forEach(element => {
-                    /*
-                    <div class="card">
-                        <img src="a" class="card-img-top" alt="pokemon_icon_065_00.png">
-                    </div>
-                    */
+
                     var cont = document.createElement('div');
                     var b = document.createElement('div');
                     var i = document.createElement('img');
 
-                    cont.className = "col-xs-2 col-md-2";
+                    cont.className = "col-4 col-sm-2 col-md-2";
 
                     b.dataset.src = element.uri
+
                     b.className = "card mb-2";
 
-                    i.src = element.uri
+                    i.src = element.medium
                     i.alt = element.originalname
                     i.dataset.src = element.thumbnail
+
                     i.className = "card-img-top"
 
                     b.addEventListener('click', clickSetImage, false)
@@ -69,8 +91,38 @@
                     document.getElementById('target-imgs').appendChild(cont)
                     cont.appendChild(b)
                     b.appendChild(i)
+
+                    // SIZE SELECTOR
+                    var selectorElement = document.createElement('div')
+                    selectorElement.className = 'editor-image-selector'
+                    // selectorElement.style.display = 'none'
+
+                    var setMin = document.createElement('div')
+                    setMin.addEventListener('click', insertImageInEditor, false)
+                    setMin.dataset.src = element.thumbnail
+                    var setMinTxt = document.createTextNode('S')
+                    setMin.appendChild(setMinTxt)
+
+                    var setMed = document.createElement('div')
+                    setMed.addEventListener('click', insertImageInEditor, false)
+                    setMed.dataset.src = element.medium
+                    var setMedTxt = document.createTextNode('M')
+                    setMed.appendChild(setMedTxt)
+
+                    var setBig = document.createElement('div')
+                    setBig.addEventListener('click', insertImageInEditor, false)
+                    setBig.dataset.src = element.uri
+                    var setBigTxt = document.createTextNode('O')
+                    setBig.appendChild(setBigTxt)
+
+                    selectorElement.appendChild(setMin)
+                    selectorElement.appendChild(setMed)
+                    selectorElement.appendChild(setBig)
+                    b.appendChild(selectorElement)
                 });
             })
+        }).catch(e => {
+            alert(e)
         });
         // var image = prompt('image')
         // editor.insertEmbed(sel.index, 'image', image);

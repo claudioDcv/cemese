@@ -2,45 +2,46 @@
 <html>
 
 <head>
-  <title>
-    <%= dataSite.title %>
-  </title>
-  <%- include('includes/links-public'); -%>
+    <title>
+        <%= dataSite.title %>
+    </title>
+    <%- include('includes/links-public'); -%>
 </head>
 
 <body>
-  <%- include('includes/menus-public'); -%>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>
-          <%= dataSite.title %>
-        </h1>
-      </div>
-      <div class="col-md-12">
-        <div class="row cemese-galery">
-          <% posts.forEach(function(post){ %>
-          <div class="col-md-3 mb-2">
-            <div class="card">
-              <div class="card-header">
-                <%= post.title %>
-              </div>
-              <div class="card-body">
-                <%= new Date(post.create_at).toLocaleDateString() %>
-                <%= post.friendly_url %>
-              </div>
-              <div class="card-footer">
-                <div class="btn-group">
-                  <a href="/cemese/site/posts/view/<%= post.friendly_url %>" class="btn-sm btn btn-outline-primary">
-                    <i class="icofont-eye-alt"></i></a>
+    <%- include('includes/menus-public'); -%>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>
+                        <%= dataSite.title %>
+                    </h1>
                 </div>
-              </div>
+                <div class="col-md-12">
+                    <div class="row cemese-galery">
+                        <% posts.forEach(function(post){ %>
+                            <div class="col-md-3 mb-2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <%= post.title %>
+                                    </div>
+                                    <div class="card-body">
+                                        <%= new Date(post.create_at).toLocaleDateString() %>
+                                            <img src="<%= post.thumbnail %>" class="img-responsive" alt="thumbnail">
+                                            <%= post.friendly_url %>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="btn-group">
+                                            <a href="/cemese/site/posts/view/<%= post.friendly_url %>" class="btn-sm btn btn-outline-primary">
+                                                <i class="icofont-eye-alt"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
             </div>
-          </div>
-          <% }); %>
-      </div>
-    </div>
-  </div>
 </body>
 
 </html>
