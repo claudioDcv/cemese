@@ -7,7 +7,7 @@
     "watch": "nodemon DEBUG=cemese:* app.js"
   },
   "dependencies": {
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^5.0.0",
     "busboy": "^0.3.1",
     "connect-redis": "^3.4.0",
     "cookie-parser": "^1.4.3",
